@@ -37,17 +37,29 @@ class Operator extends Person {
 
     // Implement method to print operator details
     public void print_operator() {
+        System.out.println("*** Operator Screen ***");
+        System.out.println("----------------------------");
         System.out.println("Operator ID: " + ID);
         System.out.println("Name: " + name + " " + surname);
         System.out.println("Address: " + address);
         System.out.println("Phone: " + phone);
         System.out.println("Wage: " + wage);
+        System.out.println("----------------------------");
     }
 
     public void print_customers() {
-        for(Customer customer: customers){
-            if(customer != null){
-                customer.print_customer();;
+        int customerNumber = 1; // Müşteri sıra numarası için sayaç
+        for (Customer customer : customers) {
+            if (customer != null) {
+                // Müşteri tipini kontrol eder ve yazdırır
+                if (customer instanceof Retail_Customer) {
+                    System.out.println("Customer #" + customerNumber + " (a retail customer):");
+                } else if (customer instanceof Corporate_Customer) {
+                    System.out.println("Customer #" + customerNumber + " (a corporate customer):");
+                }
+                // Müşteri bilgilerini yazdırır
+                customer.print_customer();
+                customerNumber++; // Sıra numarasını artırır
             }
         }
     }
@@ -57,5 +69,5 @@ class Operator extends Person {
         // Implement method to define customers for this operator
     }
 
-    // Constructor, getters and setters can be added as needed
+
 }

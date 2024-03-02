@@ -86,11 +86,13 @@ class Corporate_Customer extends Customer {
     }
 
     // Method to print corporate customer details (already implemented above)
+
     @Override
     public void print_customer() {
-        super.print_customer(); // Call the method from the superclass
-        System.out.println("Company Name: " + company_name);
+        super.print_customer(); // Üst sınıfın metodunu çağırarak temel bilgileri yazdırır
+        System.out.println("Company Name: " + getCompanyName()); // Şirket adını yazdırır
     }
+
 
     // Additional methods if needed...
 }
