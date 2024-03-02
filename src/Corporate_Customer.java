@@ -1,10 +1,16 @@
 class Corporate_Customer extends Customer {
     private String company_name;
 
-    // Constructor that calls the superclass constructor and initializes company_name
+    // Parametre alan constructor
     public Corporate_Customer(String name, String surname, String address, String phone, int ID, int operator_ID, String company_name) {
         super(name, surname, address, phone, ID, operator_ID);
         this.company_name = company_name;
+    }
+
+    // Parametresiz constructor
+    public Corporate_Customer() {
+        super(); // Customer sınıfının parametresiz constructor'ını çağırır
+        this.company_name = ""; // Varsayılan bir şirket adı ile başlat
     }
 
     // Getter method for company_name
@@ -17,14 +23,74 @@ class Corporate_Customer extends Customer {
         this.company_name = company_name;
     }
 
-    // Method to print corporate customer details
+    // Diğer gereken getter ve setter metodları...
+
+    // Name için getter
+    public String getName() {
+        return name;
+    }
+
+    // Name için setter
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    // Surname için getter
+    public String getSurname() {
+        return surname;
+    }
+
+    // Surname için setter
+    public void setSurname(String surname) {
+        this.surname = surname;
+    }
+
+    // Address için getter
+    public String getAddress() {
+        return address;
+    }
+
+    // Address için setter
+    public void setAddress(String address) {
+        this.address = address;
+    }
+
+    // Phone için getter
+    public String getPhone() {
+        return phone;
+    }
+
+    // Phone için setter
+    public void setPhone(String phone) {
+        this.phone = phone;
+    }
+
+    // ID için getter
+    public int getID() {
+        return ID;
+    }
+
+    // ID için setter
+    public void setID(int ID) {
+        this.ID = ID;
+    }
+
+    // Operator_ID için getter
+    public int getOperator_ID() {
+        return operator_ID;
+    }
+
+    // Operator_ID için setter
+    public void setOperator_ID(int operator_ID) {
+        this.operator_ID = operator_ID;
+    }
+
+    // Method to print corporate customer details (already implemented above)
     @Override
     public void print_customer() {
         super.print_customer(); // Call the method from the superclass
         System.out.println("Company Name: " + company_name);
     }
 
-    // You can override other methods from the Customer class if necessary
-    // For example, if the way orders are printed is different for corporate customers
-    // you can override the print_orders() method here
+    // Additional methods if needed...
 }

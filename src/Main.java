@@ -68,8 +68,75 @@ public class Main {
                         // Operatörü HashMap'e ekle
                         operators.put(ID, operator);
 
+
                         break;
-                    // Diğer durumlar...
+
+                    case "retail_customer":
+                        System.out.println(data[0]);
+                        System.out.println(data[1]);
+                        System.out.println(data[2]);
+                        System.out.println(data[3]);
+                        System.out.println(data[4]);
+                        System.out.println(data[5]);
+                        System.out.println(data[6]);
+
+                        int customerIDRetail = Integer.parseInt(data[5]);
+                        int operatorIDRetail = Integer.parseInt(data[6]);
+                        String retailcustomerName = data[1];
+                        String retailcustomerSurname = data[2];
+                        String retailcustomerAddress = data[3];
+                        String retailcustomerPhone = data[4];
+
+                        // Retail_Customer nesnesini parametreler ile oluşturur
+                        Retail_Customer retailCustomer = new Retail_Customer();
+
+                        // Verileri setter metotları ile nesneye aktarır
+                        retailCustomer.setName(retailcustomerName);
+                        retailCustomer.setSurname(retailcustomerSurname);
+                        retailCustomer.setAddress(retailcustomerAddress);
+                        retailCustomer.setPhone(retailcustomerPhone);
+                        retailCustomer.setID(customerIDRetail);
+                        retailCustomer.setOperator_ID(operatorIDRetail);
+
+                        // Müşteriyi HashMap'e ekler
+                        customers.put(customerIDRetail, retailCustomer);
+
+                        // Müşteri bilgilerini yazdırır
+                        retailCustomer.print_customer();
+
+                        break;
+
+
+                    case "corporate_customer":
+                        //corporate customer verilerini işleme
+                        int customerIDCorporate = Integer.parseInt(data[5]);
+                        int operatorIDCorporate = Integer.parseInt(data[6]);
+                        String corporateCustomerName = data[1];
+                        String corporateCustomerSurname = data[2];
+                        String corporateCustomerAddress = data[3];
+                        String corporateCustomerPhone = data[4];
+                        String companyName = data[7];
+
+                        // Corporate_Customer nesnesini parametresiz constructor ile oluştur
+                        Corporate_Customer corporateCustomer = new Corporate_Customer();
+
+                        // Verileri setter metotları ile nesneye aktar
+                        corporateCustomer.setName(corporateCustomerName);
+                        corporateCustomer.setSurname(corporateCustomerSurname);
+                        corporateCustomer.setAddress(corporateCustomerAddress);
+                        corporateCustomer.setPhone(corporateCustomerPhone);
+                        corporateCustomer.setID(customerIDCorporate);
+                        corporateCustomer.setOperator_ID(operatorIDCorporate);
+                        corporateCustomer.setCompanyName(companyName);
+
+                        // Müşteriyi customers HashMap'ine ekler
+                        customers.put(customerIDCorporate, corporateCustomer);
+
+                        // Müşteri bilgilerini yazdırır
+                        corporateCustomer.print_customer();
+
+                        break;
+
                 }
 
 
@@ -77,5 +144,27 @@ public class Main {
         } catch (FileNotFoundException e) {
             throw new RuntimeException(e);
         }
+
+        for (Customer customer : customers.values()) {
+            Operator operator = operators.get(customer.getOperator_ID());
+            if (operator != null) {
+                for (int i = 0; i < operator.getCustomers().length; i++) {
+                    if (operator.getCustomers()[i] == null) {
+                        operator.getCustomers()[i] = customer;
+                        break;
+                    }
+                }
+            }
+        }
+
+        // Now associate orders with customers
+        for (Order order : orders.values()) {
+            Customer customer = customers.get(order.getCustomer_ID());
+            if (customer != null) {
+                // Assuming there's a method in Customer class to add orders
+                customer.addOrder(order);
+            }
+        }
     }
+
 }
