@@ -5,6 +5,8 @@ class Operator extends Person {
 
     // Constructor
     public Operator(){
+        super();
+
         this.name = name;
         this.surname = surname;
         this.address = address;

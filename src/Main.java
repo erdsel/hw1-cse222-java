@@ -3,55 +3,79 @@ import java.io.FileNotFoundException;
 import java.util.HashMap;
 import java.util.Scanner;
 
+
 public class Main {
     public static void main(String[] args) {
         HashMap<Integer, Operator> operators = new HashMap<>();
         HashMap<Integer, Customer> customers = new HashMap<>();
         HashMap<Integer, Order> orders = new HashMap<>();
 
-        // Dosya okuma
+        // Dosyadan verileri oku ve HashMap'leri doldur
+        readFileAndPopulateMaps(operators, customers, orders);
+
+        Scanner scanner = new Scanner(System.in);
+        System.out.println("Lütfen bir ID giriniz:");
+        int id = scanner.nextInt();
+
+        if (operators.containsKey(id)) {
+            Operator operator = operators.get(id);
+            operator.print_operator(); // Operatör bilgilerini yazdır
+            operator.print_customers(); // Operatöre bağlı müşterilerin bilgilerini yazdır
+        } else if (customers.containsKey(id)) {
+            Customer customer = customers.get(id);
+            customer.print_customer(); // Müşteri bilgilerini yazdır
+        } else {
+            System.out.println("Bu ID'ye sahip bir operatör veya müşteri bulunamadı.");
+        }
+
+        scanner.close();
+    }
+
+    private static void readFileAndPopulateMaps(HashMap<Integer,Operator>operators,HashMap<Integer, Customer> customers,
+                                                HashMap<Integer, Order> orders ) {
         try {
-            File file = new File("content.txt");
+            File file= new File("content.txt");
             Scanner fileScanner = new Scanner(file);
-            while (fileScanner.hasNextLine()) {
-                String line = fileScanner.nextLine();
-                String[] data = line.split(";");
+            while (
+                    fileScanner.hasNextLine()
+            ){
+                String line= fileScanner.nextLine();
+                String[] data= line.split(";");
 
                 switch (data[0]) {
-                    case "order":
-                        // Order verilerini işle ve orders map'ine ekle
-                        break;
-                    case "retail_customer":
-                        // RetailCustomer verilerini işle ve customers map'ine ekle
-                        break;
-                    case "corporate_customer":
-                        // CorporateCustomer verilerini işle ve customers map'ine ekle
-                        break;
                     case "operator":
-                        // Operator verilerini işle ve operators map'ine ekle
+                        // Verileri ayrıştır
+                        String name = data[1];
+                        String surname = data[2];
+                        String address = data[3];
+                        String phone = data[4];
+                        int ID = Integer.parseInt(data[5]);
+                        int wage = Integer.parseInt(data[6]);
+
+                        // Operator nesnesi oluştur
+                        Operator operator = new Operator();
+                        operator.setName(name);
+                        operator.setSurname(surname);
+                        operator.setAddress(address);
+                        operator.setPhone(phone);
+                        operator.setID(ID);
+                        operator.setWage(wage);
+
+                        // Operator'ün müşterilerini tanımla (bu aşama daha sonra yapılacak)
+                        // Önce tüm operatörler ve müşteriler okunmalı
+                        // Sonra müşterilerin operator_ID'lerine göre operatörlere atanmalı
+
+                        // Operatörü HashMap'e ekle
+                        operators.put(ID, operator);
+
                         break;
+                    // Diğer durumlar...
                 }
+
+
             }
-            fileScanner.close();
         } catch (FileNotFoundException e) {
-            System.out.println("Dosya bulunamadı.");
-            return;
+            throw new RuntimeException(e);
         }
-
-        // Kullanıcıdan ID girişi al
-        Scanner inputScanner = new Scanner(System.in);
-        System.out.println("Lütfen bir ID numarası giriniz:");
-        int ID = inputScanner.nextInt();
-
-        // ID'ye göre bilgileri yazdır
-        if (operators.containsKey(ID)) {
-            // Operator ve müşterilerinin bilgilerini yazdır
-        } else if (customers.containsKey(ID)) {
-            // Müşterinin bilgilerini yazdır
-        } else {
-            System.out.println("Girilen ID ile eşleşen bir operatör veya müşteri bulunamadı.");
-        }
-
-        inputScanner.close();
     }
 }

@@ -3,14 +3,10 @@ class Customer extends Person {
     protected int operator_ID;
 
     // Constructor
+// Customer sınıfı için Constructor
     public Customer(String name, String surname, String address, String phone, int ID, int operator_ID) {
-        this.name = name;
-        this.surname = surname;
-        this.address = address;
-        this.phone = phone;
-        this.ID = ID;
+        super(); // Person sınıfının Constructor'ını çağırır.
         this.operator_ID = operator_ID;
-        this.orders = new Order[10]; // Initialize with some default capacity
     }
 
     // Getter for orders
