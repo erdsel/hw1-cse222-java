@@ -7,12 +7,12 @@ class Operator extends Person {
     public Operator(){
         super();
 
-        this.name = name;
-        this.surname = surname;
-        this.address = address;
-        this.phone = phone;
-        this.ID = ID;
-        this.wage = wage;
+        this.name = this.name;
+        this.surname = this.surname;
+        this.address = this.address;
+        this.phone = this.phone;
+        this.ID = this.ID;
+        this.wage = this.wage;
         // Assuming the fixed size for customers array is defined somewhere
         this.customers = new Customer[100];
 
@@ -49,6 +49,7 @@ class Operator extends Person {
 
     public void print_customers() {
         int customerNumber = 1; // Müşteri sıra numarası için sayaç
+
         if (this.customers == null || this.customers.length == 0 || this.customers[0] == null) {
             System.out.println("This operator doesn't have any customer.");
         }
@@ -70,6 +71,15 @@ class Operator extends Person {
     public void define_customers(Customer[] customers) {
         this.customers = customers;
         // Implement method to define customers for this operator
+    }
+    public void addCustomer(Customer customer) {
+        for (int i = 0; i < this.customers.length; i++) {
+            if (this.customers[i] == null) {
+                this.customers[i] = customer;
+                return; // Müşteriyi ekledikten sonra döngüden çık
+            }
+        }
+        System.out.println("This operator's customer list is full."); // Müşteri listesi doluysa
     }
 
 

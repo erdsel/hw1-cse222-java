@@ -1,47 +1,40 @@
 import java.io.File;
 import java.io.FileNotFoundException;
-import java.util.HashMap;
 import java.util.Scanner;
 
-
 public class Main {
-    public static void main(String[] args) {
-        HashMap<Integer, Operator> operators = new HashMap<>();
-        HashMap<Integer, Customer> customers = new HashMap<>();
-        HashMap<Integer, Order> orders = new HashMap<>();
+    private static final int MAX_OPERATORS = 100;
+    private static final int MAX_CUSTOMERS = 100;
+    private static final int MAX_ORDERS = 100;
+    private static Operator[] operators = new Operator[MAX_OPERATORS];
+    private static Customer[] customers = new Customer[MAX_CUSTOMERS];
+    private static Order[] orders = new Order[MAX_ORDERS];
+    private static int operatorCount = 0;
+    private static int customerCount = 0;
+    private static int orderCount = 0;
 
-        // Dosyadan verileri oku ve HashMap'leri doldur
-        readFileAndPopulateMaps(operators, customers, orders);
+    public static void main(String[] args) {
+        // Dosyadan verileri oku ve dizi yapılarını doldur
+        readFileAndPopulateArrays();
 
         Scanner scanner = new Scanner(System.in);
         System.out.println("Lütfen bir ID giriniz:");
         int id = scanner.nextInt();
 
-        if (operators.containsKey(id)) {
-            Operator operator = operators.get(id);
-            operator.print_operator(); // Operatör bilgilerini yazdır
-            operator.print_customers(); // Operatöre bağlı müşterilerin bilgilerini yazdır
-        } else if (customers.containsKey(id)) {
-            Customer customer = customers.get(id);
-            customer.print_customer(); // Müşteri bilgilerini yazdır
-        } else {
-            System.out.println("Bu ID'ye sahip bir operatör veya müşteri bulunamadı.");
-        }
+        // ID'ye göre arama yap ve sonuçları yazdır
+        printDetailsById(id);
 
         scanner.close();
     }
 
-    private static void readFileAndPopulateMaps(HashMap<Integer,Operator>operators,HashMap<Integer, Customer> customers,
-                                                HashMap<Integer, Order> orders ) {
+    private static void readFileAndPopulateArrays() {
         try {
-            File file= new File("content.txt");
-            Scanner fileScanner = new Scanner(file);
-            while (
-                    fileScanner.hasNextLine()
-            ){
-                String line= fileScanner.nextLine();
-                String[] data= line.split(";");
+            File file = new File("content.txt");
+            Scanner scanner = new Scanner(file);
 
+            while (scanner.hasNextLine()) {
+                String line = scanner.nextLine();
+                String[] data = line.split(";");
                 switch (data[0]) {
                     case "operator":
                         // Verileri ayrıştır
@@ -61,19 +54,9 @@ public class Main {
                         operator.setID(ID);
                         operator.setWage(wage);
 
-                        // Operator'ün müşterilerini tanımla (bu aşama daha sonra yapılacak)
-                        // Önce tüm operatörler ve müşteriler okunmalı
-                        // Sonra müşterilerin operator_ID'lerine göre operatörlere atanmalı
-
-                        // Operatörü HashMap'e ekle
-                        operators.put(ID, operator);
-
-
+                        operators[operatorCount++] = operator;
                         break;
-
                     case "retail_customer":
-
-
                         int customerIDRetail = Integer.parseInt(data[5]);
                         int operatorIDRetail = Integer.parseInt(data[6]);
                         String retailcustomerName = data[1];
@@ -92,17 +75,9 @@ public class Main {
                         retailCustomer.setID(customerIDRetail);
                         retailCustomer.setOperator_ID(operatorIDRetail);
 
-                        // Müşteriyi HashMap'e ekler
-                        customers.put(customerIDRetail, retailCustomer);
-
-                        // Müşteri bilgilerini yazdırır
-                      //  retailCustomer.print_customer();
-
+                        customers[customerCount++] = retailCustomer;
                         break;
-
-
                     case "corporate_customer":
-                        //corporate customer verilerini işleme
                         int customerIDCorporate = Integer.parseInt(data[5]);
                         int operatorIDCorporate = Integer.parseInt(data[6]);
                         String corporateCustomerName = data[1];
@@ -123,14 +98,8 @@ public class Main {
                         corporateCustomer.setOperator_ID(operatorIDCorporate);
                         corporateCustomer.setCompanyName(companyName);
 
-                        // Müşteriyi customers HashMap'ine ekler
-                        customers.put(customerIDCorporate, corporateCustomer);
-
-                        // Müşteri bilgilerini yazdırır
-                    //    corporateCustomer.print_customer();
-
+                        customers[customerCount++] = corporateCustomer;
                         break;
-
                     case "order":
                         // order verilerini işleme
                         String productName = data[1];
@@ -148,53 +117,64 @@ public class Main {
                         order.setTotal_price(total_price);
                         order.setStatus(status); // Bu metot status int değerini alıp içeride string'e çevirebilir
                         order.setCustomer_ID(customerID);
-
-                        // Siparişi orders HashMap'ine ekler
-                        orders.put(customerID, order);
-
-                        // Sipariş bilgilerini yazdırır (toString metodu bu formatta string döndürmelidir)
-                       // System.out.println(order);
-
+                        orders[orderCount++] = order;
                         break;
-
+                    default:
+                        // Handle unexpected data type
+                        break;
                 }
-
-
             }
+            scanner.close();
         } catch (FileNotFoundException e) {
-            throw new RuntimeException(e);
+            e.printStackTrace();
         }
 
-        for (Customer customer : customers.values()) {
-            // Her müşteri için, müşterinin operatörünü operators HashMap'inden al
-            Operator operator = operators.get(customer.getOperator_ID());
-            if (operator != null) {
-                // Eğer bu operatör varsa, müşteriyi operatörün müşteri listesine ekle
-                for (int i = 0; i < operator.getCustomers().length; i++) {
-                    // Operatörün müşteri dizisinde boş bir yer ara
-                    if (operator.getCustomers()[i] == null) {
-                        // Boş yer bulunca, o yere müşteriyi ekle ve döngüden çık
-                        operator.getCustomers()[i] = customer;
-                        break;
-                    }
+        // Link customers to their operators
+        for (int i = 0; i < customerCount; i++) {
+            int operatorId = customers[i].getOperator_ID();
+            for (int j = 0; j < operatorCount; j++) {
+                if (operators[j].getID() == operatorId) {
+                    operators[j].addCustomer(customers[i]);
+                    break;
                 }
             }
         }
 
-// Şimdi siparişleri müşterilere atama işlemi yap
-        for (Order order : orders.values()) {
-
-            // Siparişin müşteri ID'sini kullanarak ilgili müşteriyi customers HashMap'inden al
-            Customer customer = customers.get(order.getCustomer_ID());
-            if (customer != null) {
-                // Eğer bu müşteri varsa, siparişi müşterinin sipariş listesine ekle
-                // Customer sınıfında sipariş eklemek için bir metod varsayılıyor (örneğin, addOrder)
-                customer.addOrder(order);
+        // Link orders to their customers
+        for (int i = 0; i < orderCount; i++) {
+            int customerId = orders[i].getCustomer_ID();
+            for (int j = 0; j < customerCount; j++) {
+                if (customers[j].getID() == customerId) {
+                    customers[j].addOrder(orders[i]);
+                    break;
+                }
             }
         }
-
-
-
     }
 
+
+    private static void printDetailsById(int id) {
+        // Operatörler üzerinde arama yap
+        for (Operator operator : operators) {
+            if (operator != null && operator.getID() == id) {
+                operator.print_operator(); // Operatör bilgilerini yazdır
+                operator.print_customers(); // Operatöre ait müşterilerin bilgilerini yazdır
+                return; // İşlem tamamlandı, metottan çık
+            }
+        }
+
+        // Müşteriler üzerinde arama yap
+        for (Customer customer : customers) {
+            if (customer != null && customer.getID() == id) {
+                customer.print_customer(); // Müşteri bilgilerini yazdır
+                return; // İşlem tamamlandı, metottan çık
+            }
+        }
+
+        // Eğer bu ID'ye ait bir operatör veya müşteri bulunamazsa
+        System.out.println("Bu ID'ye sahip bir operatör veya müşteri bulunamadı.");
+    }
+
+
+    // Diğer yardımcı metodlarınız burada olacak
 }
