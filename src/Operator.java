@@ -49,6 +49,9 @@ class Operator extends Person {
 
     public void print_customers() {
         int customerNumber = 1; // Müşteri sıra numarası için sayaç
+        if (this.customers == null || this.customers.length == 0 || this.customers[0] == null) {
+            System.out.println("This operator doesn't have any customer.");
+        }
         for (Customer customer : customers) {
             if (customer != null) {
                 // Müşteri tipini kontrol eder ve yazdırır

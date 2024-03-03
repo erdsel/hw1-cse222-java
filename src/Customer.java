@@ -7,15 +7,15 @@ class Customer extends Person {
     // Constructor
     // Parametresiz constructor
     public Customer() {
-        // Person sınıfının parametresiz constructor'ını çağırır
-        super(); // Bu da Person sınıfında parametresiz bir constructor olması gerektiğini ima eder
-        // Customer'a özgü ek başlatmalar yapılabilir
+        super();
+        this.orders = new Order[100]; // 100 boyutunda bir sipariş dizisi başlatılıyor.
+        this.numOrders = 0;
     }
-// Customer sınıfı için Constructor
+
     public Customer(String name, String surname, String address, String phone, int ID, int operator_ID) {
-        super(); // Person sınıfının Constructor'ını çağırır.
+        super();
         this.operator_ID = operator_ID;
-        this.orders = new Order[100]; // Assuming a maximum of 100 orders per customer for simplicity
+        this.orders = new Order[100]; // 100 boyutunda bir sipariş dizisi başlatılıyor.
         this.numOrders = 0;
     }
 
@@ -41,11 +41,13 @@ class Customer extends Person {
 
     // Method to print customer details
     public void print_customer() {
+        System.out.println("*** Customer Screen ***");
         System.out.println("Customer ID: " + ID);
         System.out.println("Name: " + name + " " + surname);
         System.out.println("Address: " + address);
         System.out.println("Phone: " + phone);
         System.out.println("Operator ID: " + operator_ID);
+        print_orders_for_customer();
     }
 
     // Method to print all orders' details
@@ -65,12 +67,15 @@ class Customer extends Person {
         }
     }
 
-    public void print_orders() {
+    public void print_orders_for_customer() {
         System.out.println("Orders for customer ID: " + this.ID);
         for (int i = 0; i < numOrders; i++) {
             if (orders[i] != null) {
-                System.out.println(orders[i].toString()); // Assuming you have a toString method in Order class
+                System.out.println("Order #" + (i + 1) + " => " + orders[i].toString());
+                System.out.println("----------------------------------------------------");
             }
         }
     }
+
+
 }

@@ -72,13 +72,7 @@ public class Main {
                         break;
 
                     case "retail_customer":
-                        System.out.println(data[0]);
-                        System.out.println(data[1]);
-                        System.out.println(data[2]);
-                        System.out.println(data[3]);
-                        System.out.println(data[4]);
-                        System.out.println(data[5]);
-                        System.out.println(data[6]);
+
 
                         int customerIDRetail = Integer.parseInt(data[5]);
                         int operatorIDRetail = Integer.parseInt(data[6]);
@@ -102,7 +96,7 @@ public class Main {
                         customers.put(customerIDRetail, retailCustomer);
 
                         // Müşteri bilgilerini yazdırır
-                        retailCustomer.print_customer();
+                      //  retailCustomer.print_customer();
 
                         break;
 
@@ -133,7 +127,33 @@ public class Main {
                         customers.put(customerIDCorporate, corporateCustomer);
 
                         // Müşteri bilgilerini yazdırır
-                        corporateCustomer.print_customer();
+                    //    corporateCustomer.print_customer();
+
+                        break;
+
+                    case "order":
+                        // order verilerini işleme
+                        String productName = data[1];
+                        int count = Integer.parseInt(data[2]);
+                        int total_price = Integer.parseInt(data[3]);
+                        int status = Integer.parseInt(data[4]);
+                        int customerID = Integer.parseInt(data[5]);
+
+                        // Order nesnesini parametresiz constructor ile oluştur
+                        Order order = new Order();
+
+                        // Verileri setter metotları ile nesneye aktar
+                        order.setProduct_name(productName);
+                        order.setCount(count);
+                        order.setTotal_price(total_price);
+                        order.setStatus(status); // Bu metot status int değerini alıp içeride string'e çevirebilir
+                        order.setCustomer_ID(customerID);
+
+                        // Siparişi orders HashMap'ine ekler
+                        orders.put(customerID, order);
+
+                        // Sipariş bilgilerini yazdırır (toString metodu bu formatta string döndürmelidir)
+                       // System.out.println(order);
 
                         break;
 
@@ -146,10 +166,14 @@ public class Main {
         }
 
         for (Customer customer : customers.values()) {
+            // Her müşteri için, müşterinin operatörünü operators HashMap'inden al
             Operator operator = operators.get(customer.getOperator_ID());
             if (operator != null) {
+                // Eğer bu operatör varsa, müşteriyi operatörün müşteri listesine ekle
                 for (int i = 0; i < operator.getCustomers().length; i++) {
+                    // Operatörün müşteri dizisinde boş bir yer ara
                     if (operator.getCustomers()[i] == null) {
+                        // Boş yer bulunca, o yere müşteriyi ekle ve döngüden çık
                         operator.getCustomers()[i] = customer;
                         break;
                     }
@@ -157,14 +181,20 @@ public class Main {
             }
         }
 
-        // Now associate orders with customers
+// Şimdi siparişleri müşterilere atama işlemi yap
         for (Order order : orders.values()) {
+
+            // Siparişin müşteri ID'sini kullanarak ilgili müşteriyi customers HashMap'inden al
             Customer customer = customers.get(order.getCustomer_ID());
             if (customer != null) {
-                // Assuming there's a method in Customer class to add orders
+                // Eğer bu müşteri varsa, siparişi müşterinin sipariş listesine ekle
+                // Customer sınıfında sipariş eklemek için bir metod varsayılıyor (örneğin, addOrder)
                 customer.addOrder(order);
             }
         }
+
+
+
     }
 
 }

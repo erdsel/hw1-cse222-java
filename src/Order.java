@@ -55,5 +55,24 @@ class Order {
         System.out.println("Customer ID: " + customer_ID);
     }
 
+    @Override
+    public String toString() {
+        return "Product name: " + this.getProduct_name() +
+                " - Count: " + this.getCount() +
+                " - Total price: " + this.getTotal_price() +
+                " - Status: " + getStatusString(this.status);
+    }
+
+    // Status int değerini karşılık gelen String değere dönüştüren yardımcı metod
+    private String getStatusString(int status) {
+        switch (status) {
+            case 0: return "Initialized";
+            case 1: return "Processing";
+            case 2: return "Completed";
+            case 3: return "Cancelled";
+            default: return "Unknown";
+        }
+    }
+
     // Constructor can be added as needed
 }
