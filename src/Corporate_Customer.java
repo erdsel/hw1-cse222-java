@@ -85,12 +85,12 @@ class Corporate_Customer extends Customer {
         this.operator_ID = operator_ID;
     }
 
-    // Method to print corporate customer details (already implemented above)
+
 
     @Override
     public void print_customer() {
-        super.print_customer(); // Üst sınıfın metodunu çağırarak temel bilgileri yazdırır
-        System.out.println("Company Name: " + getCompanyName()); // Şirket adını yazdırır
+        super.print_customer();
+        System.out.println("Company Name: " + getCompanyName());
     }
 
 

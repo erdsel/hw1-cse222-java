@@ -1,5 +1,5 @@
 class Customer extends Person {
-    protected Order[] orders; // Assuming a fixed size for simplicity, e.g., 10
+    protected Order[] orders;
     protected int operator_ID;
 
     private int numOrders; // To keep track of the number of orders added
@@ -8,14 +8,14 @@ class Customer extends Person {
     // Parametresiz constructor
     public Customer() {
         super();
-        this.orders = new Order[100]; // 100 boyutunda bir sipariş dizisi başlatılıyor.
+        this.orders = new Order[100]; // 100
         this.numOrders = 0;
     }
 
     public Customer(String name, String surname, String address, String phone, int ID, int operator_ID) {
         super();
         this.operator_ID = operator_ID;
-        this.orders = new Order[100]; // 100 boyutunda bir sipariş dizisi başlatılıyor.
+        this.orders = new Order[100]; // 100 boyutunda bir sipariş dizisi
         this.numOrders = 0;
     }
 
@@ -50,10 +50,7 @@ class Customer extends Person {
         print_orders_for_customer();
     }
 
-    // Method to print all orders' details
 
-
-    // Method to define orders for this customer
     public void define_orders(Order[] orders) {
         this.orders = orders;
     }
@@ -70,12 +67,14 @@ class Customer extends Person {
     public void print_orders_for_customer() {
         System.out.println("Orders for customer ID: " + this.ID);
         for (int i = 0; i < numOrders; i++) {
-            if (orders[i] != null) {
+            // Check if the order is not null and the count is greater than 0
+            if (orders[i] != null && orders[i].getCount() > 0) {
                 System.out.println("Order #" + (i + 1) + " => " + orders[i].toString());
-                System.out.println("----------------------------------------------------");
             }
         }
+        System.out.println("----------------------------------------------------");
     }
+
 
 
 }

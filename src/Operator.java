@@ -1,7 +1,7 @@
 // Operator class, extends the Person class
 class Operator extends Person {
     int wage;
-    private Customer[] customers; // Assuming a fixed size for simplicity
+    private Customer[] customers;
 
     // Constructor
     public Operator(){
@@ -13,7 +13,6 @@ class Operator extends Person {
         this.phone = this.phone;
         this.ID = this.ID;
         this.wage = this.wage;
-        // Assuming the fixed size for customers array is defined somewhere
         this.customers = new Customer[100];
 
     }
@@ -35,7 +34,7 @@ class Operator extends Person {
         this.customers = customers;
     }
 
-    // Implement method to print operator details
+
     public void print_operator() {
         System.out.println("*** Operator Screen ***");
         System.out.println("----------------------------");
@@ -70,7 +69,7 @@ class Operator extends Person {
 
     public void define_customers(Customer[] customers) {
         this.customers = customers;
-        // Implement method to define customers for this operator
+
     }
     public void addCustomer(Customer customer) {
         for (int i = 0; i < this.customers.length; i++) {
